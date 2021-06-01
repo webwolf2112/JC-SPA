@@ -50,16 +50,10 @@
     border: 1px solid #d83c3c;
 };
 
-.buttonContainer {
-    padding-top: 20px;
-    display: flex;
-    justify-content: flex-end;
-}
-
 .buttonContainer button{
     padding: 10px;
     min-width: 150px;
-    margin-left: 20px;
+    margin-left: 7px;
 }
 
 .error {

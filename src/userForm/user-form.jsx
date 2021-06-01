@@ -70,9 +70,9 @@ const UserForm = ( {handleSubmit, currentUser = {} , cancel, isFetching } ) => {
             <input id="email" type="email" defaultValue={email} required/>
 
             <div className={styles.buttonContainer}>
-            <button onClick={cancel} aria-label="Cancel" className="inverse">Cancel</button>
-            <button type="submit" disabled={isFetching}>{submitText}</button>
-        </div>
+                <button onClick={cancel} aria-label="Cancel" className="inverse">Cancel</button>
+                <button type="submit" disabled={isFetching}>{submitText}</button>
+            </div>
         </form>
        
         </div>

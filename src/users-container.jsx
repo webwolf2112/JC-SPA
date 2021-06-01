@@ -1,8 +1,8 @@
 import React, {useEffect, useState } from 'react';
 import { getUsers, createUser, deleteUser, updateUser } from './jc-service';
-import UserList from './usersTable/user-list';
+import UserList from './userList/user-list';
 import UsersHeader from './users-header';
-import UserForm from './userForm/user-form';
+import UserFormModal from './userForm/user-form';
 
 const UsersContainer = () => {
     /**
@@ -16,7 +16,7 @@ const UsersContainer = () => {
     const [users, setUsers] = useState([]);
     const [isLoading, setIsLoading] = useState( true );
     const [isFetching, setIsFetching] = useState( false );
-    const [ userForm, setUserForm ] = useState( false );
+    const [ userFormModal, setUserFormModal ] = useState( false );
     const [ currentUser, setCurrentUser ] = useState( {} );
     const [ serviceError, setServiceError ] = useState();
 
@@ -47,17 +47,17 @@ const UsersContainer = () => {
 
     const handleUpdateUserModal = ( userIndex ) => {
         setCurrentUser( users[userIndex] );
-        setUserForm( true );
+        setUserFormModal( true );
         setIsFetching( false );
     };
 
     const handleCreateUserModal = () => {
         setCurrentUser( {} );
-        setUserForm( true );
+        setUserFormModal( true );
     };
 
-    const cancelUserForm = () => {
-       setUserForm( false );
+    const cancelUserFormModal = () => {
+       setUserFormModal( false );
     };
 
     const handleSubmit = async (formValues ) => {
@@ -78,22 +78,22 @@ const UsersContainer = () => {
         }
 
         fetchUsers( true );
-        setUserForm( false );
+        setUserFormModal( false );
     } 
 
     //Early return  - Loading state
     if( isLoading ) {
         return (
-            <div> Initial Loading . . . </div>
+            <div className="loading"> Loading . . . </div>
         )
     }
 
     return(
         <>
         {
-            userForm &&
+            userFormModal &&
                 <>
-                <UserForm currentUser={ currentUser } cancel={cancelUserForm} handleSubmit={handleSubmit} isFetching={isFetching}/>
+                <UserFormModal currentUser={ currentUser } cancel={cancelUserFormModal} handleSubmit={handleSubmit} isFetching={isFetching}/>
                 </>
         }       
                 <>

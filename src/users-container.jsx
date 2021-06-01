@@ -1,8 +1,8 @@
 import React, {useEffect, useState } from 'react';
-import { getUsers } from './jc-service';
-import UserList from './user-list';
-import UserActionsRow from './user-actions-row';
-import UserForm from './user-form';
+import { getUsers, createUser, deleteUser, updateUser } from './jc-service';
+import UserList from './usersTable/user-list';
+import UsersHeader from './users-header';
+import UserForm from './userForm/user-form';
 
 const UsersContainer = () => {
     /**
@@ -12,27 +12,36 @@ const UsersContainer = () => {
      * already been fetched. 
      * 
      */
-    useEffect( async () => {
+    
+    useEffect( () => {
+        async function fetchData() {
             const users = await getUsers();
             setUsers(users);
             setIsFetching( false );
+        }
+
+        fetchData();
     }, []);
 
     const [users, setUsers] = useState([]);
-    const [isFetching, setIsFetching] = useState( true );
+    const [isFetching, setIsFetching] = useState( false );
     const [ userForm, setUserForm ] = useState( false );
     const [ currentUser, setCurrentUser ] = useState( {} );
+    const [ userActionType, setUserActionType ] = useState( 'new' );
 
-    const deleteUser = ( userId ) => {
-        console.log( 'deleteUser', userId )
+    const handleDeleteUser = async ( userId ) => {
+        await deleteUser( userId );
+        const users = await getUsers();
+        setUsers(users);
     };
 
-    const updateUser = ( userIndex ) => {
+    const handleUpdateUser = ( userIndex ) => {
         setCurrentUser( users[userIndex]);
         setUserForm( true );
     };
 
-    const createUser = () => {
+    const handleCreateUser = () => {
+        setCurrentUser( {} );
         setUserForm( true );
     };
 
@@ -44,31 +53,45 @@ const UsersContainer = () => {
        setUserForm( false );
     };
 
+    const handleSubmit = async (formValues ) => {
+        if (!currentUser.id) {
+           await createUser( formValues );
+           
+        } else {
+           await updateUser( currentUser.id, formValues );
+            console.log( 'user has been successfully updated ');
+            
+        }
+
+        const users = await getUsers();
+        setUsers(users);
+        setUserForm( false );
+    } 
+
     //Early return  - Loading state
     if( isFetching ) {
         return (
-            <div> Loading . . . </div>
+            <div> Initial Loading . . . </div>
         )
     }
 
     return(
         <>
         {
-            userForm ? 
+            userForm &&
                 <>
-                <UserForm currentUser={ currentUser } cancel={cancelUserForm}/>
+                <UserForm currentUser={ currentUser } cancel={cancelUserForm} handleSubmit={handleSubmit}/>
                 </>
-            :
+        }       
                 <>
-                <h1>Total Users: {users.length}</h1>
-                <UserActionsRow createUser={createUser}/>
-                <UserList
-                    users={users}
-                    deleteUser={deleteUser}
-                    updateUser={updateUser}
-                />
+                    <UsersHeader handleCreateUser={handleCreateUser} count={users.length} />
+                    <UserList
+                        users={users}
+                        deleteUser={handleDeleteUser}
+                        updateUser={handleUpdateUser}
+                    />
                 </>
-        }
+    
         </>
     )
 };

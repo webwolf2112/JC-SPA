@@ -12,8 +12,23 @@
   border-top: none;
   display: flex;
   justify-content: space-between;
+  text-align: left;
 }
 
 .UserList li:first-child {
   border-top: 1px solid #2cc692;
+}
+
+.UserList span{
+  flex-basis: 25%;
+  flex-grow: 0;
+  text-overflow: ellipsis;
+  width: 25%;
+  white-space: wrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+span button {
+  margin-left: 10px;
 }

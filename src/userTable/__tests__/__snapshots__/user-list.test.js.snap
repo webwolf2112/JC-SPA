@@ -1,0 +1,47 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`User Form Test  Should render correct 1`] = `
+<Fragment>
+  <ul
+    className="UserList"
+  >
+    <li>
+      <span>
+        First Name
+      </span>
+      <span>
+        Last Name
+      </span>
+      <span>
+        Email
+      </span>
+      <span />
+    </li>
+    <li
+      key="1234"
+    >
+      <span>
+        hello
+      </span>
+      <span>
+        world
+      </span>
+      <span />
+      <span>
+        <button
+          className="inverse"
+          disabled={false}
+          onClick={[Function]}
+        >
+          Delete User
+        </button>
+        <button
+          onClick={[Function]}
+        >
+          Update User
+        </button>
+      </span>
+    </li>
+  </ul>
+</Fragment>
+`;

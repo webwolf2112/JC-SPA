@@ -8,7 +8,6 @@ export const getUsers = async() => {
       return response.data.results;
 
     } catch (error) {
-        console.error( error );
       return { error };
     }
 }
@@ -33,13 +32,15 @@ export const updateUser = async(id, formValues) => {
     }
 }
 
+/**This was not used. If I were to use it I would have added in an additional modal that shows all 
+ * of the user information in the UI.
+**/
 export const getUserById = async(id) => {
     try {
       const response = await axios.get(`${API_PATH}/${id}`);
       return response.data.results;
 
     } catch (error) {
-        console.error( error );
         return { error };
     }
 }

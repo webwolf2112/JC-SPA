@@ -1,0 +1,80 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`User Form Test  Should render correct 1`] = `
+<div
+  className="modalContainer"
+>
+  <div
+    className="modalContent"
+  >
+    <button
+      aria-label="Close Modal"
+      className="close"
+      onClick={[MockFunction]}
+    >
+      X
+    </button>
+    <form
+      className="form"
+      onChange={[Function]}
+      onSubmit={[Function]}
+    >
+      <label
+        htmlFor="username"
+      >
+        User Name
+      </label>
+      <input
+        id="username"
+        required={true}
+        type="text"
+      />
+      <label
+        htmlFor="firstname"
+      >
+        First Name
+      </label>
+      <input
+        id="firstname"
+        type="text"
+      />
+      <label
+        htmlFor="lastname"
+      >
+        Last Name
+      </label>
+      <input
+        id="lastname"
+        type="text"
+      />
+      <label
+        htmlFor="email"
+      >
+        Email
+      </label>
+      <input
+        id="email"
+        required={true}
+        type="email"
+      />
+      <div
+        className="buttonContainer"
+      >
+        <button
+          aria-label="Cancel"
+          className="inverse"
+          onClick={[MockFunction]}
+        >
+          Cancel
+        </button>
+        <button
+          disabled={false}
+          type="submit"
+        >
+          Create User
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+`;

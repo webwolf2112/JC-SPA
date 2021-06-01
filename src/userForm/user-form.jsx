@@ -52,7 +52,7 @@ const UserForm = ( {handleSubmit, currentUser = {} , cancel, isFetching } ) => {
             { formType === 'new' &&
                 <>
                     <label htmlFor="username">User Name</label>
-                    <input id="username" type="text" defaultValue={username} required className={nameError && styles.inputError}/>
+                    <input id="username" type="text" defaultValue={username} required className={nameError ? styles.inputError : undefined}/>
                     {
                         nameError && 
                         <p className={styles.error}>You can not have spaces in the user name</p>

@@ -1,8 +1,9 @@
 import React, {useEffect, useState } from 'react';
-import { getUsers, createUser, deleteUser, updateUser } from './jc-service';
-import UserList from './userList/user-list';
+import { getUsers, createUser, deleteUser, updateUser } from '../services/jc-service';
+import UserList from './user-list';
 import UsersHeader from './users-header';
-import UserFormModal from './userForm/user-form';
+import UserFormModal from '../userForm/user-form';
+import ErrorModal from './error-modal';
 
 const UsersContainer = () => {
     /**
@@ -14,11 +15,11 @@ const UsersContainer = () => {
      */
 
     const [users, setUsers] = useState([]);
-    const [isLoading, setIsLoading] = useState( true );
+    const [isInitialLoad, setIsInitialLoad] = useState( true );
     const [isFetching, setIsFetching] = useState( false );
     const [ userFormModal, setUserFormModal ] = useState( false );
     const [ currentUser, setCurrentUser ] = useState( {} );
-    const [ serviceError, setServiceError ] = useState();
+    const [ errorMessage, setErrorMessage ] = useState();
 
     const fetchUsers = async ( isInitialLoad ) => {
         const users = await getUsers();
@@ -27,7 +28,11 @@ const UsersContainer = () => {
         setIsFetching( false );
 
         if( isInitialLoad ) {
-            setIsLoading( false );
+            setIsInitialLoad( false );
+        }
+
+        if( users.error) {
+            setErrorMessage( 'Error Fetching Users. Please try again later');
         }
     };
 
@@ -39,41 +44,26 @@ const UsersContainer = () => {
         setIsFetching( true );
         const { error } = await deleteUser( userId );
         if( error ){
-            setServiceError( 'Error Updating User');
+            setErrorMessage( 'Error Deleting User');
         } else {
             fetchUsers( true );
         }
     };
-
-    const handleUpdateUserModal = ( userIndex ) => {
-        setCurrentUser( users[userIndex] );
-        setUserFormModal( true );
-        setIsFetching( false );
-    };
-
-    const handleCreateUserModal = () => {
-        setCurrentUser( {} );
-        setUserFormModal( true );
-    };
-
-    const cancelUserFormModal = () => {
-       setUserFormModal( false );
-    };
-
+    
     const handleSubmit = async (formValues ) => {
         setIsFetching( true );
         if (!currentUser.id) {
            const { error } = await createUser( formValues );
            setIsFetching( false );
            if( error ){
-            setServiceError( 'Error Creating User');
+            setErrorMessage( 'Error Creating User');
            }
            
         } else {
            const { error } = await updateUser( currentUser.id, formValues );
             setIsFetching( false );
             if( error ){
-                setServiceError( 'Error Updating User');
+                setErrorMessage( 'Error Updating User');
             }
         }
 
@@ -81,8 +71,28 @@ const UsersContainer = () => {
         setUserFormModal( false );
     } 
 
+    const triggetUpdateUserModal = ( userIndex ) => {
+        setCurrentUser( users[userIndex] );
+        setUserFormModal( true );
+        setIsFetching( false );
+    };
+
+    const triggerNewUserModal = () => {
+        setCurrentUser( {} );
+        setUserFormModal( true );
+    };
+
+    const dismissUserFormModal = () => {
+       setUserFormModal( false );
+    };
+
+    const dismissError = () => {
+        setErrorMessage();
+        setIsFetching( false );
+    }
+
     //Early return  - Loading state
-    if( isLoading ) {
+    if( isInitialLoad ) {
         return (
             <div className="loading"> Loading . . . </div>
         )
@@ -93,18 +103,26 @@ const UsersContainer = () => {
         {
             userFormModal &&
                 <>
-                <UserFormModal currentUser={ currentUser } cancel={cancelUserFormModal} handleSubmit={handleSubmit} isFetching={isFetching}/>
+                <UserFormModal currentUser={ currentUser } cancel={dismissUserFormModal} handleSubmit={handleSubmit} isFetching={isFetching}/>
                 </>
         }       
                 <>
-                    <UsersHeader handleCreateUser={handleCreateUserModal} count={users.length} />
+                    <UsersHeader handleCreateUser={triggerNewUserModal} count={users.length} />
                     <UserList
                         users={users}
                         deleteUser={handleDeleteUser}
-                        updateUser={handleUpdateUserModal}
+                        updateUser={triggetUpdateUserModal}
+                        error={errorMessage}
                     />
                 </>
     
+       
+        {
+            errorMessage && 
+            <>
+                <ErrorModal errorMessage={errorMessage} dismissError={dismissError}/>
+            </>
+        }
         </>
     )
 };

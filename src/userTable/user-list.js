@@ -1,14 +1,14 @@
 import React, {useState, useEffect} from 'react';
 import styles from './user-list.module.css';
 
-const UserList = ( { users, deleteUser, updateUser } ) => {
+const UserList = ( { users, deleteUser, updateUser, error } ) => {
     const [ indexLoading, setIndexLoading ] = useState(-1);
 
     useEffect( () => {
-        if( indexLoading > -1){
+        if( indexLoading > -1 || error){
             setIndexLoading( -1 );
         }
-    }, [users]);
+    }, [users, error]);
  
     const handleDelete = ( id, index ) => {
         setIndexLoading( index );

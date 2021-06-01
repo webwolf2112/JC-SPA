@@ -50,6 +50,14 @@
     border: 1px solid #d83c3c;
 };
 
+.buttonContainer {
+    position: relative;
+}
+
+.form .buttonContainer {
+    margin-top: 5px;
+}
+
 .buttonContainer button{
     padding: 10px;
     min-width: 150px;

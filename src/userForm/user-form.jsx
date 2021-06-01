@@ -7,16 +7,36 @@ const UserForm = ( {handleSubmit, currentUser = {} , cancel, isFetching } ) => {
     const submitText = formType === 'update' ? 'Update User' : 'Create User';
 
     const [formValues, setFormValues ] = useState( {email, firstname, lastname, username });
+    const [nameError, setNameError ] = useState( false );
 
     const onchange = ( e => {
-        if( e.target.id && e.target.value){
-            setFormValues( { ...formValues, [e.target.id]: e.target.value})
+       
+        setFormValues( { ...formValues, [e.target.id]: e.target.value});
+        if( nameError ){
+            setNameError( false );
         }
+      
     });
+
+    const formValidation = () => {
+
+        const containsWhiteSpace = /\s/;
+        //Username can not contain whitespace or it will error server side
+        if( containsWhiteSpace.test(formValues.username) ) {
+            setNameError( true );
+            return false;
+        }
+
+        return true;
+    }
 
     const submit = (e) => {
         e.preventDefault();
-        
+
+        if( !formValidation() ){
+            return;
+        }
+
         //Username should not be submitted in update
         const { username, ...cleanedFormValues } = currentUser;
         const correctFormValues = currentUser.userName ? cleanedFormValues : formValues;
@@ -32,7 +52,11 @@ const UserForm = ( {handleSubmit, currentUser = {} , cancel, isFetching } ) => {
             { formType === 'new' &&
                 <>
                     <label htmlFor="username">User Name</label>
-                    <input id="username" type="text" defaultValue={username} required/>
+                    <input id="username" type="text" defaultValue={username} required className={nameError && styles.inputError}/>
+                    {
+                        nameError && 
+                        <p className={styles.error}>You can not have spaces in the user name</p>
+                    }
                 </>
             }
 

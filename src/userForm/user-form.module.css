@@ -46,6 +46,10 @@
     min-width: 300px
 }
 
+.form .inputError {
+    border: 1px solid #d83c3c;
+};
+
 .buttonContainer {
     padding-top: 20px;
     display: flex;
@@ -56,5 +60,10 @@
     padding: 10px;
     min-width: 150px;
     margin-left: 20px;
+}
 
+.error {
+    color: #d83c3c;
+    margin-top: -6px;
+    font-size: small;
 }

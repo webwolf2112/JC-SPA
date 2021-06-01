@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import styles from './user-form.module.css';
 
-const UserForm = ( {handleSubmit, currentUser = {} , cancel } ) => {
+const UserForm = ( {handleSubmit, currentUser = {} , cancel, isFetching } ) => {
     const { email, firstname, lastname, username } = currentUser;
     const formType = username ? 'update' : 'new';
     const submitText = formType === 'update' ? 'Update User' : 'Create User';
@@ -23,12 +23,12 @@ const UserForm = ( {handleSubmit, currentUser = {} , cancel } ) => {
        
         handleSubmit(correctFormValues);
     }
-    
+
     return (
         <div className={styles.modalContainer}>
             <div className={styles.modalContent}>
             <button onClick={cancel} aria-label="Close Modal" className={styles.close}>X</button>
-        <form onChange={onchange} className={styles.form}>
+        <form onChange={onchange} className={styles.form} onSubmit={submit}>
             { formType === 'new' &&
                 <>
                     <label htmlFor="username">User Name</label>
@@ -42,13 +42,15 @@ const UserForm = ( {handleSubmit, currentUser = {} , cancel } ) => {
             <label htmlFor="lastname">Last Name</label>
             <input id="lastname" type="text" defaultValue={lastname} />
 
-            <label htmlFor="email">Email</label>
+            <label htmlFor="email" >Email</label>
             <input id="email" type="email" defaultValue={email} required/>
-        </form>
-        <div className={styles.buttonContainer}>
+
+            <div className={styles.buttonContainer}>
             <button onClick={cancel} aria-label="Cancel" className="inverse">Cancel</button>
-            <button type="submit" onClick={submit}>{submitText}</button>
+            <button type="submit" disabled={isFetching}>{submitText}</button>
         </div>
+        </form>
+       
         </div>
         </div>
     )

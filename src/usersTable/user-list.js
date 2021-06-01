@@ -1,7 +1,19 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import styles from './user-list.module.css';
 
-const UserList = ( { users, deleteUser, updateUser} ) => {
+const UserList = ( { users, deleteUser, updateUser } ) => {
+    const [ indexLoading, setIndexLoading ] = useState(-1);
+
+    useEffect( () => {
+        if( indexLoading > -1){
+            setIndexLoading( -1 );
+        }
+    }, [users]);
+ 
+    const handleDelete = ( id, index ) => {
+        setIndexLoading( index );
+        deleteUser(id)
+    };
 
     return (
         <>
@@ -17,12 +29,12 @@ const UserList = ( { users, deleteUser, updateUser} ) => {
                 {
                     users.map( ({email, firstname, lastname, id}, index) => {
                         return (
-                        <li key={firstname}>
+                        <li key={id}>
                                 <span>{firstname}</span>
                                 <span>{lastname}</span>
                                 <span>{email}</span>
                                 <span>
-                                    <button onClick={() => deleteUser(id)} className="inverse">Delete User</button>
+                                    <button disabled={ indexLoading === index } onClick={() => handleDelete(id, index)} className="inverse">Delete User</button>
                                     <button onClick={() => updateUser(index)}>Update User</button>
                                 </span>
                         </li>

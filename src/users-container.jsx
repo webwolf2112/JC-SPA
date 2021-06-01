@@ -12,41 +12,48 @@ const UsersContainer = () => {
      * already been fetched. 
      * 
      */
-    
-    useEffect( () => {
-        async function fetchData() {
-            const users = await getUsers();
-            setUsers(users);
-            setIsFetching( false );
-        }
-
-        fetchData();
-    }, []);
 
     const [users, setUsers] = useState([]);
+    const [isLoading, setIsLoading] = useState( true );
     const [isFetching, setIsFetching] = useState( false );
     const [ userForm, setUserForm ] = useState( false );
     const [ currentUser, setCurrentUser ] = useState( {} );
-    const [ userActionType, setUserActionType ] = useState( 'new' );
+    const [ serviceError, setServiceError ] = useState();
+
+    const fetchUsers = async ( isInitialLoad ) => {
+        const users = await getUsers();
+
+        setUsers(users);
+        setIsFetching( false );
+
+        if( isInitialLoad ) {
+            setIsLoading( false );
+        }
+    };
+
+    useEffect( () => {
+        fetchUsers( true );
+    }, []);
 
     const handleDeleteUser = async ( userId ) => {
-        await deleteUser( userId );
-        const users = await getUsers();
-        setUsers(users);
+        setIsFetching( true );
+        const { error } = await deleteUser( userId );
+        if( error ){
+            setServiceError( 'Error Updating User');
+        } else {
+            fetchUsers( true );
+        }
     };
 
-    const handleUpdateUser = ( userIndex ) => {
-        setCurrentUser( users[userIndex]);
+    const handleUpdateUserModal = ( userIndex ) => {
+        setCurrentUser( users[userIndex] );
         setUserForm( true );
+        setIsFetching( false );
     };
 
-    const handleCreateUser = () => {
+    const handleCreateUserModal = () => {
         setCurrentUser( {} );
         setUserForm( true );
-    };
-
-    const getUserById = (userId) => {
-        console.log( 'get user by Id', userId)
     };
 
     const cancelUserForm = () => {
@@ -54,22 +61,28 @@ const UsersContainer = () => {
     };
 
     const handleSubmit = async (formValues ) => {
+        setIsFetching( true );
         if (!currentUser.id) {
-           await createUser( formValues );
+           const { error } = await createUser( formValues );
+           setIsFetching( false );
+           if( error ){
+            setServiceError( 'Error Creating User');
+           }
            
         } else {
-           await updateUser( currentUser.id, formValues );
-            console.log( 'user has been successfully updated ');
-            
+           const { error } = await updateUser( currentUser.id, formValues );
+            setIsFetching( false );
+            if( error ){
+                setServiceError( 'Error Updating User');
+            }
         }
 
-        const users = await getUsers();
-        setUsers(users);
+        fetchUsers( true );
         setUserForm( false );
     } 
 
     //Early return  - Loading state
-    if( isFetching ) {
+    if( isLoading ) {
         return (
             <div> Initial Loading . . . </div>
         )
@@ -80,15 +93,15 @@ const UsersContainer = () => {
         {
             userForm &&
                 <>
-                <UserForm currentUser={ currentUser } cancel={cancelUserForm} handleSubmit={handleSubmit}/>
+                <UserForm currentUser={ currentUser } cancel={cancelUserForm} handleSubmit={handleSubmit} isFetching={isFetching}/>
                 </>
         }       
                 <>
-                    <UsersHeader handleCreateUser={handleCreateUser} count={users.length} />
+                    <UsersHeader handleCreateUser={handleCreateUserModal} count={users.length} />
                     <UserList
                         users={users}
                         deleteUser={handleDeleteUser}
-                        updateUser={handleUpdateUser}
+                        updateUser={handleUpdateUserModal}
                     />
                 </>
     

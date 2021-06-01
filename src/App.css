@@ -27,6 +27,11 @@ button.inverse {
   border: 1px solid #2cc692;
 }
 
+button:disabled {
+  background-color: #ccc;
+  border: 1px solid #a9a9a9;
+}
+
 ul {
   list-style-type: none;
 }

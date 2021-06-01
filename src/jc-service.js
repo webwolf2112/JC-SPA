@@ -8,26 +8,28 @@ export const getUsers = async() => {
       return response.data.results;
 
     } catch (error) {
-      return error;
+        console.error( error );
+      return { error };
     }
 }
 
 export const createUser = async (formValues ) => {
+
     try {
-        await axios.post(API_PATH, formValues);
+        return await axios.post(API_PATH, formValues);
     } catch (error) {
-        console.log( error );
+        console.error( error );
+        return { error };
     }
 
 }
 
 export const updateUser = async(id, formValues) => {
     try {
-      const response = await axios.put(`${API_PATH}/${id}`, formValues);
-      return response.data.results;
-
+      return await axios.put(`${API_PATH}/${id}`, formValues);
     } catch (error) {
-      return error;
+        console.error( error );
+        return { error };
     }
 }
 
@@ -37,14 +39,15 @@ export const getUserById = async(id) => {
       return response.data.results;
 
     } catch (error) {
-      return error;
+        console.error( error );
+        return { error };
     }
 }
 
 export const deleteUser = async(id) => {
     try {
-      await axios.delete(`${API_PATH}/${id}`);
+      return await axios.delete(`${API_PATH}/${id}`);
     } catch (error) {
-      return error;
+      return { error };
     }
 }

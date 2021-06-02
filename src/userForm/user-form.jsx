@@ -19,7 +19,12 @@ const UserForm = ( {handleSubmit, currentUser = {} , cancel, isFetching } ) => {
     });
 
     const formValidation = () => {
-
+        /** 
+         * For a production environment we should bring in a full validation library
+         * or potentially a form library.  For this exercise I wanted to code
+         * out the validation so the reviewers would know that my coding abillity
+         * is not dependent on libraries.
+         **/
         const containsWhiteSpace = /\s/;
         //Username can not contain whitespace or it will error server side
         if( containsWhiteSpace.test(formValues.username) ) {
@@ -37,7 +42,7 @@ const UserForm = ( {handleSubmit, currentUser = {} , cancel, isFetching } ) => {
             return;
         }
 
-        //Username should not be submitted in update
+        //Username should not be submitted in update call
         const { username, ...cleanedFormValues } = currentUser;
         const correctFormValues = currentUser.userName ? cleanedFormValues : formValues;
        

@@ -6,14 +6,6 @@ import UserFormModal from '../userForm/user-form';
 import ErrorModal from './error-modal';
 
 const UsersContainer = () => {
-    /**
-     * Fetch the users on load. We are just using an empty array so the useEffect
-     * does not load multiple times. In a production app it would be better to use different
-     * criteria to check if it should fetch. Such as using a store and seeing if the data as 
-     * already been fetched. 
-     * 
-     */
-
     const [users, setUsers] = useState( [] );
     const [isInitialLoad, setIsInitialLoad] = useState( true );
     const [isFetching, setIsFetching] = useState( false );
@@ -36,6 +28,14 @@ const UsersContainer = () => {
         }
     };
 
+    /**
+     * Fetch the users on load. We are just using an empty array so the useEffect
+     * does not load multiple times. In a production app it would be better to use different
+     * criteria to check if it should fetch. Such as using a store or a context.  This would
+     * allow us to see if the data has already been fetched as well as being able to share the user
+     * data across the app - thus helping performance.
+     * 
+     */
     useEffect( () => {
         fetchUsers( true );
     }, []);
@@ -43,6 +43,12 @@ const UsersContainer = () => {
     const handleDeleteUser = async ( userId ) => {
         setIsFetching( true );
         const { error } = await deleteUser( userId );
+        /** 
+         * This is not an ideal way to handle error handling. It would be better
+         * to have a middleware handle the errors and passing that data to a store 
+         * where the errors could be more streamline. 
+         * For this simple app assignment I decided that was overkill.
+         */
         if( error ){
             setErrorMessage( 'Error deleting user. Please try again later.');
         } else {
@@ -98,7 +104,7 @@ const UsersContainer = () => {
         setIsFetching( false );
     }
 
-    //Early return  - Loading state
+    //Early return  - Initial loading state
     if( isInitialLoad ) {
         return (
             <div className="loading"> Loading . . . </div>

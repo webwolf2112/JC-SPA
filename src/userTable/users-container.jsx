@@ -44,7 +44,7 @@ const UsersContainer = () => {
         setIsFetching( true );
         const { error } = await deleteUser( userId );
         if( error ){
-            setErrorMessage( 'Error Deleting User');
+            setErrorMessage( 'Error deleting user. Please try again later.');
         } else {
             fetchUsers( true );
         }
@@ -54,7 +54,7 @@ const UsersContainer = () => {
         const { error } = await createUser( formValues );
         setIsFetching( false );
         if( error ){
-         setErrorMessage( 'Error Creating User');
+         setErrorMessage( 'Error creating user. Please try again later.');
         }
     };
 
@@ -62,7 +62,7 @@ const UsersContainer = () => {
         const { error } = await updateUser( currentUser.id, formValues );
         setIsFetching( false );
         if( error ){
-            setErrorMessage( 'Error Updating User');
+            setErrorMessage( 'Error updating user. Please try again later.');
         }
     }
     

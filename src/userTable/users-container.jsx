@@ -14,7 +14,7 @@ const UsersContainer = () => {
      * 
      */
 
-    const [users, setUsers] = useState([]);
+    const [users, setUsers] = useState( [] );
     const [isInitialLoad, setIsInitialLoad] = useState( true );
     const [isFetching, setIsFetching] = useState( false );
     const [ userFormModal, setUserFormModal ] = useState( false );
@@ -49,22 +49,29 @@ const UsersContainer = () => {
             fetchUsers( true );
         }
     };
+
+    const handleCreateUser = async( formValues ) => {
+        const { error } = await createUser( formValues );
+        setIsFetching( false );
+        if( error ){
+         setErrorMessage( 'Error Creating User');
+        }
+    };
+
+    const handleUpdateUser = async( formValues ) => {
+        const { error } = await updateUser( currentUser.id, formValues );
+        setIsFetching( false );
+        if( error ){
+            setErrorMessage( 'Error Updating User');
+        }
+    }
     
     const handleSubmit = async (formValues ) => {
         setIsFetching( true );
         if (!currentUser.id) {
-           const { error } = await createUser( formValues );
-           setIsFetching( false );
-           if( error ){
-            setErrorMessage( 'Error Creating User');
-           }
-           
+            await handleCreateUser(formValues);
         } else {
-           const { error } = await updateUser( currentUser.id, formValues );
-            setIsFetching( false );
-            if( error ){
-                setErrorMessage( 'Error Updating User');
-            }
+            await handleUpdateUser(formValues);
         }
 
         fetchUsers( true );

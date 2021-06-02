@@ -24,8 +24,7 @@ describe('JC Service', () => {
             }
         });
 
-        /** Due to a busy schedule I do not have time to complete all of the tests, but these
-       * are the additional test cases I would normally write. 
+       /** These are the additional test cases I would normally write. 
 
         1) happy/error path for createUser
         2) happy/error path for updateUser

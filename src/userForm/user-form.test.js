@@ -27,8 +27,7 @@ describe( 'User Form Test ', () => {
         expect( wrapper.find( 'button[type="submit"]' ).props().disabled ).toBeTruthy();
       });
 
-      /** Due to a busy schedule I do not have time to complete all of the tests, but these
-       * are the additional test cases I would normally write. 
+      /** These are the additional test cases I would normally write. 
 
         1) ensure the inputs populate correctly for update user
         2) ensure that the firstname input does not show up on update user

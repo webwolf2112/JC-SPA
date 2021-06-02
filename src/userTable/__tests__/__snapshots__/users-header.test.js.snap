@@ -1,0 +1,16 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Users Header  Should render correct 1`] = `
+<Fragment>
+  <h1>
+    Total Users: 
+    5
+  </h1>
+  <button
+    className="create"
+    onClick={[MockFunction]}
+  >
+    Create New User
+  </button>
+</Fragment>
+`;

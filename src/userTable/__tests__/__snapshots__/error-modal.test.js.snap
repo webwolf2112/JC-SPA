@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Error Modal  Should render correct 1`] = `
+<div
+  className="modal"
+>
+   
+  test error message
+   
+</div>
+`;
